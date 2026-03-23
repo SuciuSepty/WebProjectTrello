@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Trello Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- iconite FontAwesome -- fara ele arata a nimic -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="logo">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Ascunde/Arată panoul lateral"><i class="fas fa-bars"></i></button>
+            <i class="fas fa-trello"></i>
+            <h1>TaskFlow</h1>
+        </div>
+        <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Student&background=0D8ABC&color=fff" alt="User Profile">
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <button class="add-board-btn" onclick="addNewBoard()"><i class="fas fa-plus"></i> Creează Tablou Nou</button>
+            <h3>Tablourile Mele</h3>
+            <ul class="board-list" id="boardList"></ul>
+        </aside>
+
+        <main class="board-content">
+            <div class="board-header">
+                <h2 id="currentBoardTitle" style="display: none;">Nicio pagină selectată <i class="fas fa-star" style="color: gold; font-size: 16px;"></i></h2>
+                <h2 id="emptyStateText">Creează sau selectează un tablou din stânga pentru a începe.</h2>
+            </div>
+            
+            <div class="lists-container" id="listsContainer" style="display: none;">
+                
+                <div class="add-list-wrapper">
+                    <button class="add-list-btn" onclick="addNewList()"><i class="fas fa-plus"></i> Adaugă o listă nouă</button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- template pentru un tablou nou in sidebar -->
+    <template id="board-template">
+        <li><span class="board-emoji"></span> <span class="board-name"></span></li>
+    </template>
+
+    <!-- template pentru o lista/tabel -- se cloneaza la fiecare lista noua -->
+    <template id="list-template">
+        <div class="list">
+            <div class="list-header">
+                <h3 class="list-title">Titlu Listă</h3>
+                <i class="fas fa-trash" title="Șterge lista" onclick="this.closest('.list').remove()"></i>
+            </div>
+            <div class="cards-container"></div>
+            <button class="add-card-btn" onclick="addNewCard(this)"><i class="fas fa-plus"></i> Adaugă o sarcină</button>
+        </div>
+    </template>
+
+    <!-- template pentru un card/sarcina -- baza oricarei activitati -->
+    <template id="card-template">
+        <div class="card" draggable="true" onclick="openTaskDetails(this, event)">
+            <div class="card-top">
+                <div class="card-title">
+                    <input type="checkbox" title="Marchează ca finalizat" onchange="toggleTask(this)">
+                    <span class="task-text"></span>
+                </div>
+                <div class="card-actions">
+                    <i class="fas fa-comment-dots" title="Comentarii" onclick="toggleComments(this)"></i>
+                    <i class="fas fa-trash" title="Șterge sarcina" onclick="this.closest('.card').remove()"></i>
+                </div>
+            </div>
+            <div class="card-comments">
+                <div class="comments-input-row">
+                    <input type="color" class="comment-color-picker" value="#5e6c84" title="Culoare comentariu">
+                    <input type="text" class="comment-input" placeholder="Adaugă comentariu..." onkeydown="handleCommentKey(event, this)">
+                    <button class="comment-send-btn" onclick="submitComment(this)" title="Trimite"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- interfata modala -- inlocuieste prompt()-urile inestetice -->
+    <div id="modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="modal" id="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">Tabelă nouă</h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-board-section">
+                    <div class="form-group">
+                        <label>Numele tabloului</label>
+                        <input type="text" id="input-board-name" placeholder="Ex: Facultate, Cumpărături, Muncă...">
+                    </div>
+                    <div class="form-group">
+                        <label>Icon tablou</label>
+                        <div class="emoji-custom-row">
+                            <input type="text" id="input-custom-emoji" class="emoji-custom-input" maxlength="4" placeholder="sau scrie tu..." oninput="onCustomEmojiType()">
+                        </div>
+                        <div class="emoji-grid" id="emoji-grid">
+                            <button class="emoji-btn active" data-emoji="📚">📚</button>
+                            <button class="emoji-btn" data-emoji="💼">💼</button>
+                            <button class="emoji-btn" data-emoji="🏠">🏠</button>
+                            <button class="emoji-btn" data-emoji="🛒">🛒</button>
+                            <button class="emoji-btn" data-emoji="💪">💪</button>
+                            <button class="emoji-btn" data-emoji="❤️">❤️</button>
+                            <button class="emoji-btn" data-emoji="🎮">🎮</button>
+                            <button class="emoji-btn" data-emoji="🚀">🚀</button>
+                            <button class="emoji-btn" data-emoji="💰">💰</button>
+                            <button class="emoji-btn" data-emoji="✅">✅</button>
+                            <button class="emoji-btn" data-emoji="🔥">🔥</button>
+                            <button class="emoji-btn" data-emoji="🌟">🌟</button>
+                            <button class="emoji-btn" data-emoji="📌">📌</button>
+                            <button class="emoji-btn" data-emoji="🛠️">🛠️</button>
+                            <button class="emoji-btn" data-emoji="🎨">🎨</button>
+                            <button class="emoji-btn" data-emoji="📝">📝</button>
+                            <button class="emoji-btn" data-emoji="🔔">🔔</button>
+                            <button class="emoji-btn" data-emoji="🤖">🤖</button>
+                            <button class="emoji-btn" data-emoji="⚽">⚽</button>
+                            <button class="emoji-btn" data-emoji="🎵">🎵</button>
+                        </div>
+                    </div>
+                    <div class="form-divider"></div>
+                </div>
+                <div id="modal-list-section">
+                    <div class="form-group">
+                        <label>Numele tabelei</label>
+                        <input type="text" id="input-list-name" placeholder="Ex: De făcut, Luni, Joi...">
+                    </div>
+                    <div class="form-group">
+                        <label>Culoare tabelă</label>
+                        <div class="color-row">
+                            <input type="color" id="input-list-color" value="#ebecf0" oninput="syncHex('list')">
+                            <input type="text" id="input-list-hex" class="hex-input" value="#ebecf0" maxlength="7" oninput="syncColor('list')" placeholder="#ebecf0">
+                        </div>
+                    </div>
+                    <div class="form-divider"></div>
+                </div>
+                <div id="modal-card-section">
+                    <div class="form-group">
+                        <label id="modal-card-label">Sarcină</label>
+                        <input type="text" id="input-card-name" placeholder="Ex: Referat, Cumpărături...">
+                    </div>
+                    <div class="form-group">
+                        <label>Culoare sarcină</label>
+                        <div class="color-row">
+                            <input type="color" id="input-card-color" value="#ffffff" oninput="syncHex('card')">
+                            <input type="text" id="input-card-hex" class="hex-input" value="#ffffff" maxlength="7" oninput="syncColor('card')" placeholder="#ffffff">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Comentariu sarcină</label>
+                        <input type="text" id="input-card-comment" placeholder="Notă, detaliu, reminder...">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">Anulează</button>
+                <button class="btn-confirm" onclick="confirmModal()"><i class="fas fa-check"></i> Creează</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

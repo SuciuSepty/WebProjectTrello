@@ -1,0 +1,700 @@
+/* reset global -- stergem tot ce vine din browser by default */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0079bf; /* Culoarea clasică Trello */
+    color: #172b4d;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header / Bara de sus */
+.topbar {
+    background-color: rgba(0, 0, 0, 0.32);
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+}
+
+.sidebar-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* sidebar ascuns -- se activeaza cu butonul hamburger */
+.sidebar.hidden {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.logo h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.user-profile img {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+}
+
+/* containerul mare care tine sidebar-ul si board-ul unul langa altul */
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Bara laterală (Paginile) */
+.sidebar {
+    width: 260px;
+    background-color: rgba(0, 0, 0, 0.15);
+    color: white;
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar h3 {
+    font-size: 14px;
+    margin-bottom: 2px;
+    padding-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.board-list {
+    list-style: none;
+    flex: 1;
+}
+
+.board-list li {
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s ease;
+}
+
+.board-list li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.board-list li.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+}
+
+.add-board-btn {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    font-weight: 600;
+}
+
+.add-board-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* zona de joaca efectiva -- unde apar listele */
+.board-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+.board-header {
+    margin-bottom: 16px;
+    color: white;
+}
+
+.board-header h2 {
+    font-size: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.board-header h2:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Textul de "empty state" nu trebuie sa arate ca un buton */
+#emptyStateText {
+    background: transparent;
+    cursor: default;
+    font-size: 18px;
+    opacity: 0.75;
+    font-weight: normal;
+}
+
+#emptyStateText:hover {
+    background: transparent;
+}
+
+/* Container pentru liste (Tabele) */
+.lists-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    overflow-x: auto;
+    padding-bottom: 16px;
+}
+
+/* o lista individuala -- coloana verticala cu sarcini */
+.list {
+    background-color: #ebecf0;
+    width: 384px; /* +20% from 320px */
+    min-width: 384px;
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px 12px 12px;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.list-header i {
+    cursor: pointer;
+    color: #6b778c;
+}
+
+/* Container pentru carduri */
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    padding-right: 4px; /* spațiu pentru scrollbar */
+}
+
+/* Stil card */
+.card {
+    background-color: white;
+    border-radius: 3px;
+    padding: 14px 17px;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    cursor: pointer;
+    font-size: 19px;
+    line-height: 1.5;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    background-color: #f4f5f7;
+    box-shadow: 0 2px 6px rgba(9, 30, 66, 0.18);
+}
+
+/* Buton adăugare card */
+.add-card-btn {
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    color: #5e6c84;
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+}
+
+.add-card-btn:hover {
+    background-color: rgba(9, 30, 66, 0.08);
+    color: #172b4d;
+}
+
+/* Buton adăugare listă complet nouă */
+.add-list-wrapper {
+    min-width: 384px;
+}
+
+.add-list-btn {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.24);
+    color: white;
+    border: none;
+    padding: 17px;
+    text-align: left;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.add-list-btn:hover {
+    background-color: rgba(255, 255, 255, 0.32);
+}
+
+/* scrollbar custom -- cel default e prea urat */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1); 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2); 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.3); 
+}
+
+/* Stiluri noi flexibile pentru Card-urile din Trello */
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.card-title input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #0079bf; /* culoarea temei, sa nu iasa din schema */
+    transform: scale(1.7);
+}
+
+.task-text {
+    word-break: break-word; /* texte lungi? trec pe randul urmator, nu sparg layout-ul */
+    transition: all 0.2s ease;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    color: #b3bac5;
+    font-size: 13px;
+    align-items: center;
+}
+
+.card-actions i {
+    cursor: pointer;
+    transition: color 0.2s ease;
+    font-size: 15px;
+}
+
+.card-actions i.fa-comment-dots:hover {
+    color: #0079bf; /* albastru = activ, ready to comment */
+}
+
+.card-actions i.fa-trash:hover {
+    color: #eb5a46; /* rosu = pericol, o sa stergi */
+}
+
+/* Container de comentarii -- toggle prin JS, nu hover fragil */
+.card-comments {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dotted #dfe1e6;
+    font-size: 12px;
+    color: #5e6c84;
+    animation: fadeSlideIn 0.18s ease;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-comments.comments-open {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comment-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8ecf5;
+    padding: 10px 11px;
+    border-radius: 4px;
+    color: #172b4d;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.comment-text {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #172b4d;
+}
+
+.comment-item.comment-done .comment-text {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.comment-actions {
+    display: none;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.comment-item:hover .comment-actions {
+    display: flex;
+}
+
+.comment-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 7px;
+    border-radius: 3px;
+    font-size: 15px;
+    line-height: 1;
+    transition: background 0.15s;
+}
+
+.comment-done-btn {
+    color: #36b37e;
+}
+
+.comment-done-btn:hover {
+    background: #e3fcef;
+}
+
+.comment-del-btn {
+    color: #eb5a46;
+}
+
+.comment-del-btn:hover {
+    background: #ffebe6;
+}
+
+.comment-item i {
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+.comments-input-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.comment-color-picker {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    background: none;
+    flex-shrink: 0;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #dfe1e6;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background: white;
+    transition: border-color 0.2s;
+}
+
+.comment-input:focus {
+    border-color: #0079bf;
+}
+
+.comment-send-btn {
+    background: #0079bf;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 8px 13px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.comment-send-btn:hover {
+    background: #005fa3;
+}
+
+.emoji-custom-row {
+    margin-bottom: 6px;
+}
+
+.emoji-custom-input {
+    width: 168px;
+    padding: 10px 14px;
+    border: 2px solid #dfe1e6;
+    border-radius: 4px;
+    font-size: 26px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.emoji-custom-input:focus {
+    border-color: #0079bf;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+}
+
+.emoji-btn {
+    background: #f4f5f7;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: 24px;
+    padding: 7px 4px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    line-height: 1;
+}
+
+.emoji-btn:hover {
+    background: #e0e4ea;
+    transform: scale(1.15);
+}
+
+.emoji-btn.active {
+    border-color: #0079bf;
+    background: #e0f0fb;
+}
+
+.board-emoji {
+    font-size: 15px;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 10px;
+    width: 576px;
+    max-width: calc(100vw - 32px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    animation: modalIn 0.18s ease;
+}
+
+@keyframes modalIn {
+    from { transform: translateY(-14px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 19px 24px 14px;
+    border-bottom: 1px solid #ebecf0;
+}
+
+.modal-header h3 {
+    font-size: 22px;
+    color: #172b4d;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b778c;
+    font-size: 15px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.modal-close:hover {
+    color: #172b4d;
+    background: #f4f5f7;
+}
+
+.modal-body {
+    padding: 24px 29px;
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #5e6c84;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"] {
+    padding: 12px 14px;
+    border: 2px solid #dfe1e6;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #172b4d;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #0079bf;
+}
+
+.color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.color-row input[type="color"] {
+    width: 42px;
+    height: 36px;
+    border: 2px solid #dfe1e6;
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    background: none;
+    flex-shrink: 0;
+}
+
+.hex-input {
+    font-family: 'Courier New', monospace;
+    width: 110px !important;
+    letter-spacing: 1px;
+}
+
+.form-divider {
+    height: 1px;
+    background: #ebecf0;
+    margin: 2px 0;
+}
+
+.modal-footer {
+    padding: 12px 20px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid #ebecf0;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 2px solid #dfe1e6;
+    color: #5e6c84;
+    padding: 12px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 17px;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #f4f5f7;
+    border-color: #b3bac5;
+}
+
+.btn-confirm {
+    background: #0079bf;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.btn-confirm:hover {
+    background: #005e9c;
+}
+
