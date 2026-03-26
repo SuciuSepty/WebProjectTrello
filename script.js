@@ -1,4 +1,4 @@
-function toggleSidebar() {
+﻿function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('hidden');
 }
 
@@ -27,7 +27,7 @@ function buildCommentItem(text, color) {
 
     const doneBtn = document.createElement("button");
     doneBtn.className = "comment-action-btn comment-done-btn";
-    doneBtn.title = "Marchează ca rezolvat";
+    doneBtn.title = "Marcheaza ca rezolvat";
     doneBtn.innerHTML = '<i class="fas fa-check"></i>';
     doneBtn.onclick = function() {
         item.classList.toggle('comment-done');
@@ -35,7 +35,7 @@ function buildCommentItem(text, color) {
 
     const delBtn = document.createElement("button");
     delBtn.className = "comment-action-btn comment-del-btn";
-    delBtn.title = "Șterge comentariul";
+    delBtn.title = "Sterge comentariul";
     delBtn.innerHTML = '<i class="fas fa-times"></i>';
     delBtn.onclick = function() {
         item.remove();
@@ -91,7 +91,7 @@ function createList(name, cards = []) {
 function createFacultateBoard() {
     const boardId = ++boardCounter;
 
-    const lista1 = createList("De făcut", [
+    const lista1 = createList("De facut", [
         createCard("Referat Sisteme de Operare", false, ["Trebuie trimis pana vineri!", "Minim 5 pagini"]),
         createCard("Tema Baze de Date – modelul E-R"),
         createCard("Citit capitolul 4 din Algoritmi"),
@@ -99,7 +99,7 @@ function createFacultateBoard() {
         createCard("Cerere bursa de merit"),
     ]);
 
-    const lista2 = createList("În progres", [
+    const lista2 = createList("In progres", [
         createCard("Proiect HTML etapa 1", false, ["Trebuie sa contina HTML, CSS si JS", "Demo live la laborator"]),
         createCard("Lab 3 Programare Orientata pe Obiecte", false, ["Clasa Animal cu mostenire"]),
     ]);
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function createDefaultLists(boardId) {
     // cele 2 liste predefinite cu care porneste orice tablou nou
-    const defaultNames = ["De făcut", "În progres"];
+    const defaultNames = ["De facut", "In progres"];
     const template = document.getElementById("list-template");
     const nodes = [];
     defaultNames.forEach(name => {
@@ -265,17 +265,17 @@ function openModal(mode, buttonRef = null) {
         document.querySelector(".emoji-btn").classList.add("active");
         document.getElementById("input-custom-emoji").value = "";
     } else if (mode === "list") {
-        document.getElementById("modal-title").textContent = "Tabelă nouă";
+        document.getElementById("modal-title").textContent = "Tabela noua";
         boardSection.style.display = "none";
         listSection.style.display = "block";
         document.getElementById("modal-card-section").style.display = "block";
-        cardLabel.textContent = "Sarcină inițială (opțional)";
+        cardLabel.textContent = "Sarcina initiala (optional)";
     } else {
-        document.getElementById("modal-title").textContent = "Sarcină nouă";
+        document.getElementById("modal-title").textContent = "Sarcina noua";
         boardSection.style.display = "none";
         listSection.style.display = "none";
         document.getElementById("modal-card-section").style.display = "block";
-        cardLabel.textContent = "Sarcină";
+        cardLabel.textContent = "Sarcina";
     }
 
     document.getElementById("modal-overlay").classList.add("open");
@@ -433,3 +433,4 @@ function handleCommentKey(event, input) {
         submitComment(input.nextElementSibling);
     }
 }
+
