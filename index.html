@@ -46,7 +46,7 @@
 
     <!-- template pentru un tablou nou in sidebar -->
     <template id="board-template">
-        <li><span class="board-emoji"></span> <span class="board-name"></span></li>
+        <li><span class="board-emoji"></span> <span class="board-name"></span> <span class="board-week"></span></li>
     </template>
 
     <!-- template pentru o lista/tabel -- se cloneaza la fiecare lista noua -->
@@ -54,7 +54,7 @@
         <div class="list">
             <div class="list-header">
                 <h3 class="list-title">Titlu Listă</h3>
-                <i class="fas fa-trash" title="Șterge lista" onclick="this.closest('.list').remove()"></i>
+                <i class="fas fa-trash" title="Șterge lista" onclick="_deleteList(this.closest('.list'))"></i>
             </div>
             <div class="cards-container"></div>
             <button class="add-card-btn" onclick="addNewCard(this)"><i class="fas fa-plus"></i> Adaugă o sarcină</button>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="card-actions">
                     <i class="fas fa-comment-dots" title="Comentarii" onclick="toggleComments(this)"></i>
-                    <i class="fas fa-trash" title="Șterge sarcina" onclick="this.closest('.card').remove()"></i>
+                    <i class="fas fa-trash" title="Șterge sarcina" onclick="_deleteCard(this.closest('.card'))"></i>
                 </div>
             </div>
             <div class="card-comments">
@@ -96,6 +96,9 @@
                     <div class="form-group">
                         <label>Numele tabloului</label>
                         <input type="text" id="input-board-name" placeholder="Ex: Facultate, Cumpărături, Muncă...">
+                    </div>
+                    <div class="form-group">
+                        <label><input type="text" id="input-board-week" placeholder="Tablou săptămânal (Luni-Duminică)"></label>
                     </div>
                     <div class="form-group">
                         <label>Icon tablou</label>
@@ -160,12 +163,13 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal()">Anulează</button>
-                <button class="btn-confirm" onclick="confirmModal()"><i class="fas fa-check"></i> Creează</button>
+                <button class="btn-cancel" onclick="closeModal()">Anuleaza</button>
+                <button class="btn-confirm" onclick="confirmModal()"><i class="fas fa-check"></i> Creeaza</button>
             </div>
         </div>
     </div>
 
+    <script src="api.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
