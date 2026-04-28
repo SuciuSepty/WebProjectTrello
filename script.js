@@ -1,4 +1,4 @@
-function toggleSidebar() {
+﻿function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('hidden');
 }
 
@@ -24,13 +24,21 @@ function buildCommentItem(text, color, commentId) {
 
     const doneBtn = document.createElement("button");
     doneBtn.className = "comment-action-btn comment-done-btn";
+<<<<<<< HEAD
     doneBtn.title = "Marche\u0103z\u0103 ca rezolvat";
+=======
+    doneBtn.title = "Marcheaza ca rezolvat";
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
     doneBtn.innerHTML = '<i class="fas fa-check"></i>';
     doneBtn.onclick = function () { item.classList.toggle('comment-done'); };
 
     const delBtn = document.createElement("button");
     delBtn.className = "comment-action-btn comment-del-btn";
+<<<<<<< HEAD
     delBtn.title = "\u0218terge comentariul";
+=======
+    delBtn.title = "Sterge comentariul";
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
     delBtn.innerHTML = '<i class="fas fa-times"></i>';
     delBtn.onclick = async function () {
         if (commentId) {
@@ -109,6 +117,7 @@ function createList(nameOrData, cards = []) {
     return listEl;
 }
 
+<<<<<<< HEAD
 async function loadBoardsFromAPI() {
     let boards;
     try {
@@ -121,6 +130,55 @@ async function loadBoardsFromAPI() {
     boards.forEach(b => _appendBoardToSidebar(b));
     const firstLi = document.querySelector(".board-list li");
     if (firstLi) firstLi.click();
+=======
+// tabloul de demo pt facultate -- apare automat la incarcare
+function createFacultateBoard() {
+    const boardId = ++boardCounter;
+
+    const lista1 = createList("De facut", [
+        createCard("Referat Sisteme de Operare", false, ["Trebuie trimis pana vineri!", "Minim 5 pagini"]),
+        createCard("Tema Baze de Date – modelul E-R"),
+        createCard("Citit capitolul 4 din Algoritmi"),
+        createCard("Inscris la examen sesiune iunie"),
+        createCard("Cerere bursa de merit"),
+    ]);
+
+    const lista2 = createList("In progres", [
+        createCard("Proiect HTML etapa 1", false, ["Trebuie sa contina HTML, CSS si JS", "Demo live la laborator"]),
+        createCard("Lab 3 Programare Orientata pe Obiecte", false, ["Clasa Animal cu mostenire"]),
+    ]);
+
+    const lista3 = createList("Finalizat ✓", [
+        createCard("Instalat Visual Studio Code", true),
+        createCard("Creat cont GitHub", true, ["username: student_ro"]),
+    ]);
+
+    boardStates.set(boardId, [lista1, lista2, lista3]);
+
+    const boardList = document.getElementById("boardList");
+    const template = document.getElementById("board-template");
+    const clone = template.content.cloneNode(true);
+    const li = clone.querySelector("li");
+    li.dataset.boardId = boardId;
+    li.querySelector(".board-emoji").textContent = "📚";
+    clone.querySelector(".board-name").textContent = "Facultate";
+
+    li.addEventListener("click", function () {
+        if (currentBoardId === parseInt(this.dataset.boardId)) return;
+        saveCurrentBoardState();
+        document.querySelectorAll(".board-list li").forEach(el => el.classList.remove("active"));
+        this.classList.add("active");
+        currentBoardId = parseInt(this.dataset.boardId);
+        loadBoardState(currentBoardId);
+        document.getElementById("currentBoardTitle").style.display = "inline-flex";
+        document.getElementById("currentBoardTitle").innerHTML = `📚 Facultate <i class="fas fa-star" style="color: gold; font-size: 16px;"></i>`;
+        document.getElementById("emptyStateText").style.display = "none";
+        document.getElementById("listsContainer").style.display = "flex";
+    });
+
+    boardList.appendChild(clone);
+    li.click();
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -133,7 +191,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+<<<<<<< HEAD
 function _appendBoardToSidebar(board) {
+=======
+function createDefaultLists(boardId) {
+    // cele 2 liste predefinite cu care porneste orice tablou nou
+    const defaultNames = ["De facut", "In progres"];
+    const template = document.getElementById("list-template");
+    const nodes = [];
+    defaultNames.forEach(name => {
+        const clone = template.content.cloneNode(true);
+        clone.querySelector(".list-title").textContent = name;
+        nodes.push(clone.firstElementChild);
+    });
+    boardStates.set(boardId, nodes);
+}
+
+function saveCurrentBoardState() {
+    if (currentBoardId === null) return;
+    // detasam listele din DOM si le salvam in memoria tabloului curent
+    const listsContainer = document.getElementById("listsContainer");
+    const lists = [...listsContainer.querySelectorAll(":scope > .list")];
+    boardStates.set(currentBoardId, lists);
+    lists.forEach(l => l.remove());
+}
+
+function loadBoardState(boardId) {
+    const listsContainer = document.getElementById("listsContainer");
+    const addListWrapper = document.querySelector(".add-list-wrapper");
+    const lists = boardStates.get(boardId) || [];
+    // re-inseram listele salvate inaintea butonului de add
+    lists.forEach(l => listsContainer.insertBefore(l, addListWrapper));
+}
+
+// desc un tablou nou -- lobby gol, niciun jucator inca
+function addNewBoard() {
+    openModal("board");
+}
+
+function _spawnBoard(boardName, boardEmoji) {
+    const boardId = ++boardCounter;
+    createDefaultLists(boardId);
+
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
     const boardList = document.getElementById("boardList");
     const template  = document.getElementById("board-template");
     const clone     = template.content.cloneNode(true);
@@ -233,17 +333,31 @@ function openModal(mode, buttonRef = null) {
         document.querySelector(".emoji-btn").classList.add("active");
         document.getElementById("input-custom-emoji").value = "";
     } else if (mode === "list") {
+<<<<<<< HEAD
         document.getElementById("modal-title").textContent = "Tabel\u0103 nou\u0103";
+=======
+        document.getElementById("modal-title").textContent = "Tabela noua";
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
         boardSection.style.display = "none";
         listSection.style.display  = "block";
         document.getElementById("modal-card-section").style.display = "block";
+<<<<<<< HEAD
         cardLabel.textContent = "Sarcin\u0103 ini\u0163ial\u0103 (op\u0163ional)";
     } else {
         document.getElementById("modal-title").textContent = "Sarcin\u0103 nou\u0103";
+=======
+        cardLabel.textContent = "Sarcina initiala (optional)";
+    } else {
+        document.getElementById("modal-title").textContent = "Sarcina noua";
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
         boardSection.style.display = "none";
         listSection.style.display  = "none";
         document.getElementById("modal-card-section").style.display = "block";
+<<<<<<< HEAD
         cardLabel.textContent = "Sarcin\u0103";
+=======
+        cardLabel.textContent = "Sarcina";
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
     }
     document.getElementById("modal-overlay").classList.add("open");
     setTimeout(() => {
@@ -424,5 +538,13 @@ async function submitComment(btnEl) {
 }
 
 function handleCommentKey(event, input) {
+<<<<<<< HEAD
     if (event.key === 'Enter') submitComment(input.nextElementSibling);
 }
+=======
+    if (event.key === 'Enter') {
+        submitComment(input.nextElementSibling);
+    }
+}
+
+>>>>>>> edb359db62dc225b8ed98ed3bd7a53e45951fcab
